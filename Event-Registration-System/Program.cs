@@ -1,3 +1,7 @@
+using Event_Registration_System.Data;
+using Event_Registration_System.Services;
+using Microsoft.EntityFrameworkCore;
+
 namespace Event_Registration_System
 {
     public class Program
@@ -7,7 +11,28 @@ namespace Event_Registration_System
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+            string ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")!;
+
+            builder.Services.AddDbContext<MainDBContext>(options => options.UseSqlServer(ConnectionString));
+            builder.Services.AddScoped<MailjetService>();
+            builder.Services.AddScoped(provider =>
+            {
+                var
+                configuration = provider.GetRequiredService<IConfiguration>();
+                string
+                apiKey = configuration[
+                "Mailjet:ApiKey"
+                ];
+                string
+                secretKey = configuration[
+                "Mailjet:SecretKey"
+                ];
+                return
+                new
+                Mailjet.Client.MailjetClient(apiKey, secretKey);
+            });
 
             var app = builder.Build();
 
