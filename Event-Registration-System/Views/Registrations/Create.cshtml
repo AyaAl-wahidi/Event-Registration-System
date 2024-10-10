@@ -1,0 +1,29 @@
+﻿@model Event_Registration_System.Models.Registration
+
+<h2>Register for Event</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="ParticipantName"></label>
+        <input asp-for="ParticipantName" class="form-control" />
+        <span asp-validation-for="ParticipantName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EventId"></label>
+        <select asp-for="EventId" class="form-control" asp-items="ViewBag.EventId"></select>
+        <span asp-validation-for="EventId" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Register</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
